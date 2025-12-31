@@ -1,9 +1,11 @@
 
+
 export enum UserRole {
   ADMIN = 'ADMIN',
   MANAGER = 'MANAGER', // Gestor de Tráfego
   CS = 'CS', // Customer Success
-  FINANCIAL = 'FINANCIAL' // Financeiro
+  FINANCIAL = 'FINANCIAL', // Financeiro
+  SDR = 'SDR' // Sales Development Representative
 }
 
 export enum PaymentMethod {
@@ -58,6 +60,18 @@ export interface Client {
   managerId: string; // ID of the Traffic Manager responsible
   csId: string;      // ID of the Customer Success responsible
 }
+
+// Helper interface for Client form
+export type ClientForm = Partial<Client> & {
+  platforms: Platform[]; // Ensure platforms is always an array for the form
+  paymentMethod: PaymentMethod; // Ensure paymentMethod is always set
+  fee: number;
+  adBudget: number;
+  startDate: string;
+  managerId: string;
+  csId: string;
+  isActive: boolean;
+};
 
 // --- FINANCE MODULE ENTITIES ---
 
@@ -137,6 +151,21 @@ export interface WeeklyReport {
   updatedAt: string;
   updatedBy?: string; // User ID who last updated
 }
+
+// Helper interface for Report form
+export type ReportForm = Partial<WeeklyReport> & {
+  startDate: string;
+  endDate: string;
+  type: CampaignType;
+  channels: ChannelResult[];
+  topCreativeLink: string;
+  managerNotes: string;
+  sales: number;
+  revenue: number;
+  productsSold: string;
+  csNotes: string;
+};
+
 
 export interface User {
   id: string;
@@ -224,6 +253,6 @@ export interface Notification {
 // Computed stats for UI
 export interface ReportStats {
   cpl: number; // Cost per lead
-  ctr: number; // Click through rate (clicks / reach * 100)
+  ctr: number; // Click through rate (clicks / reach / 100)
   roas: number; // Revenue / Spend
 }
