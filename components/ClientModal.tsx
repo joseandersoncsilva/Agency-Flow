@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { Client, ClientForm, PaymentMethod, Platform, User, UserRole, ServiceProduct } from '../types';
 import { X, Save, Trash2, Plus, Minus } from 'lucide-react';
@@ -59,6 +58,7 @@ export const ClientModal: React.FC<ClientModalProps> = ({ isOpen, onClose, onSav
     if (!isOpen) return null;
 
     const managerUsers = users.filter(u => u.role === UserRole.MANAGER);
+    // Fix: Correctly access the UserRole.CS enum value
     const csUsers = users.filter(u => u.role === UserRole.CS);
 
     const handlePlatformChange = (platform: Platform, checked: boolean) => {
@@ -146,10 +146,11 @@ export const ClientModal: React.FC<ClientModalProps> = ({ isOpen, onClose, onSav
                         <section>
                             <h3 className="text-lg font-bold text-slate-700 mb-3">Detalhes do Contrato</h3>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <input type="number" className="w-full p-2 border rounded-lg" value={form.adBudget} onChange={e => setForm({...form, adBudget: parseFloat(e.target.value)})} placeholder="Verba Mídia/Mês (R$)" min="0" />
+                                <input type="number" className="w-full p-2 border rounded-lg" value={form.fee} onChange={e => setForm({...form, fee: parseFloat(e.target.value)})} placeholder="Fee da Agência (R$)" min="0" />
                                 <select className="w-full p-2 border rounded-lg" value={form.paymentMethod} onChange={e => setForm({...form, paymentMethod: e.target.value as PaymentMethod})}>
                                     {Object.values(PaymentMethod).map(method => <option key={method} value={method}>{method}</option>)}
                                 </select>
+                                <input type="number" className="w-full p-2 border rounded-lg" value={form.adBudget} onChange={e => setForm({...form, adBudget: parseFloat(e.target.value)})} placeholder="Verba Mídia/Mês (R$)" min="0" />
                                 
                                 <div className="col-span-2">
                                     <label className="block text-sm font-medium text-slate-700 mb-2">Plataformas de Anúncio</label>

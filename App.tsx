@@ -33,7 +33,7 @@ const MeetingModal = ({ isOpen, onClose, onSave, meetingToEdit, clients, users }
             date: new Date().toISOString().split('T')[0], 
             time: '09:00', 
             type: 'Semanal', 
-            attendees: [{ userId: users[0]?.id, status: 'confirmed' }] 
+            attendees: users.length > 0 ? [{ userId: users[0].id, status: 'confirmed' }] : [] // Safe initialization
         });
     }, [meetingToEdit, isOpen, users]);
     if (!isOpen) return null;
@@ -104,7 +104,13 @@ const TaskModal = ({ isOpen, onClose, onSave, taskToEdit, users }: any) => {
     const [form, setForm] = useState<Partial<Task>>({});
     useEffect(() => {
         if (taskToEdit) setForm(taskToEdit);
-        else setForm({ status: TaskStatus.TODO, priority: TaskPriority.MEDIUM, dueDate: new Date().toISOString().split('T')[0], creatorId: users[0]?.id || '', assigneeId: users[0]?.id || '' }); // Set default creator/assignee
+        else setForm({ 
+            status: TaskStatus.TODO, 
+            priority: TaskPriority.MEDIUM, 
+            dueDate: new Date().toISOString().split('T')[0], 
+            creatorId: users.length > 0 ? users[0].id : '', // Safe initialization
+            assigneeId: users.length > 0 ? users[0].id : ''  // Safe initialization
+        }); 
     }, [taskToEdit, isOpen, users]);
     if (!isOpen) return null;
     return (
